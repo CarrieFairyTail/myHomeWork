@@ -6,11 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>指令</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <!-- v-clock插值闪烁问题；里面的值不会被覆盖 -->
-        <h1 v-clock>我们是{{msg}}</h1>
+        <!-- v-cloak插值闪烁问题；里面的值不会被覆盖 -->
+        <h1 v-cloak>我们是{{msg}}</h1>
         <p v-text='msg2'>此处的信息会被覆盖</p>
         <p v-html='msgHtml'>此处的信息也会被覆盖</p>
         <!-- v-bind绑定属性的指令；v-on 事件绑定机制 -->

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <!-- 安装路由模块v-router -->
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <router-link to='/login'>登陆</router-link>
+        <router-link to='/register'>注册</router-link>
+        <router-view></router-view>
+    </div>
+    <script>
+        // 组件模块 template字符串定义
+        var login = {
+            template:
+            `
+            <div>
+                <h1>登陆模块</h1>
+                <input type="text" placeholder="姓名">
+            </div>
+            `
+        }
+        var register = {
+            template:'<h1>注册模块</h1>'
+        } 
+        // 创建一个路由对象
+        var router = new VueRouter({
+            routes:[
+                {path:'/login',component:login},
+                {path:'/register',component:register}
+            ]
+        })
+        //Vue 实例
+        var vm = new Vue({
+            el:'#app',
+            data:{
+
+            },
+            router
+        })
+    </script>
+</body>
+</html>

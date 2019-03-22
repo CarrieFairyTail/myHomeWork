@@ -9,10 +9,13 @@
 </head>
 <body>
     <div id="app">
-        <h1>{{msg}}</h1>
+        <!-- v-clock插值闪烁问题；里面的值不会被覆盖 -->
+        <h1 v-clock>我们是{{msg}}</h1>
+        <p v-text='msg2'>此处的信息会被覆盖</p>
+        <p v-html='msgHtml'>此处的信息也会被覆盖</p>
         <!-- v-bind绑定属性的指令；v-on 事件绑定机制 -->
         <input type="button" value="加油" :title="msg2+'123'" @click="show">
-        <input type="button" value="努力" :title="msg2" @mouseover="show">
+        <input type="button" value="努力" :title="msg2" @mouseover="showTwo">
 
     </div>
     <script>
@@ -20,11 +23,15 @@
             el:'#app',
             data:{
                 msg:'社会主义的接班人',
-                msg2:'龙的传人'
+                msg2:'龙的传人',
+                msgHtml:'<h2>奋斗</h2>'
             },
             methods:{
                 show(){
                     console.log('祖国的花朵')
+                },
+                showTwo(){
+                    alert('祖国的花骨朵')
                 }
             }
         })

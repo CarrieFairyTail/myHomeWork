@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>v-for问题</title>
+</head>
+<body>
+    <div id="app">
+        <h1 style="color: brown;text-align: center">梧飞男团成员列表</h1>
+        <div>
+            <label>成员编号:
+            <input type="text" v-model="id">
+            </label><br>
+            <label>成员姓名:
+            <input type="text" v-model="name">
+            </label>
+            <input type="button" value="添加新成员" @click="add">
+            <label>
+                搜索成员：
+                <input type="text" v-model="keyword">
+            </label>
+        </div>
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <th>index</th>
+                    <th>id</th>
+                    <th>name</th>
+                </tr>
+                <tr v-for="(item,i) in search(keyword)" :key="item.id">
+                    <td><input type="checkbox">{{i}}</td>
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime}}</td>
+                    <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                id:'',
+                name:'',
+                list:[
+                    {id:1,name:'hkl',ctime:new Date()},
+                    {id:2,name:'dky',ctime:new Date()},
+                    {id:3,name:'yzw',ctime:new Date()},
+                    {id:4,name:'zy',ctime:new Date()}
+                ],
+                keyword:''//搜索的关键字
+            },
+            methods:{
+                add(){
+                    this.list.push({id:this.id,name:this.name,ctime:new Date()})
+                    this.id = this.name = ''
+                },
+                del(id){
+                    //根据id找到这一项的索引，然后调用splice方法
+                    list.some((item,i)=>{
+                        if(item.id==id){
+                            this.list.splice(i,1)
+                            //在数组的some方法中，如果return true，就会立即终止这个数组的后续循环
+                            return true
+                        }
+                    })
+                },
+                search(keyword){
+                    var newList = []
+                    this.list.forEach(item => {
+                        if(item.name.indexOf(keyword)!=-1){
+                            newList.push(item)
+                        }
+                    });
+                    return newList;
+                }
+            }
+        })
+    </script>
+    <style>
+        table td{
+            margin-top: 10px;
+            padding:10px;
+            border:1px solid brown;
+        }
+    </style>
+</body>
+</html>

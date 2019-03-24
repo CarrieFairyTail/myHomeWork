@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跑马灯</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <style>
+        .font{
+            font-size: 100px
+        }
+        input{
+            background-color: rgb(238, 196, 10)
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div :style = "styleObj">
+            <h1>梧飞男团</h1>
+            <input type="button" value="浪起来" @click="go()">
+            <input type="button" value="别浪" @click="stop()">
+            <p :class="['font']">{{msg}}</p>
+        </div>
+        
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'.app',
+            data:{
+                msg:'谁是梧飞最靓的仔~',
+                intervalId:null,   //定时器的ID
+                styleObj:{
+                    color:'orange',
+                    'font-weight':200,
+                    'text-align':'center',
+                }
+            },
+            methods:{
+                go(){
+                    if(this.intervalId!=null)return;
+                    //放在定时器中，每400毫秒自动执行操作
+                    this.intervalId = setInterval(()=>{
+                        var start = this.msg.substring(0,1);
+                        var end = this.msg.substring(1);
+                        this.msg = end + start;
+                    },400)
+                },
+                stop(){//停止定时器
+                    clearInterval(this.intervalId);
+                    //释放后id不存在需重新定义
+                    this.intervalId = null;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

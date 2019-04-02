@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <!-- 第三方动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <style>
+        /*
+        v-enter 【这是一个时间点】是进入之前，元素的起始状态，此时还没有开始进入
+        v-leave-to  【这是一个时间点】是动画离开之后离开的终止状态，此时元素的动画已经结束了
+        */
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateX(180px); /*位移*/
+        }
+
+        /*
+        v-enter-active 【入场动画的时间段】
+        v-leave-active 【离场动画的时间段】
+        */
+        .v-enter-active,  
+        .v-leave-active{
+            transition: all .4s ease;
+        }
+
+        /* 可以设置不同的进入和离开动画 */
+        /* 设置持续时间和动画函数 */
+        .slide-fade-enter-active {
+            transition: all .3s ease;
+        }
+        .slide-fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active for below version 2.1.8 */ {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+
+        /* CSS 动画用法同 CSS 过渡，区别是在动画中 v-enter 类名在节点插入 DOM 后不会立即删除，而是在 animationend 事件触发时删除 */
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        .my-enter,
+        .my-leave-to{
+            opacity: 0;
+            transform: translateY(180px); /*位移*/
+        }
+
+
+        .my-enter-active,  
+        .my-leave-active{
+            transition: all .4s ease;
+           
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        需求点击按钮，让h3显示，再点击让h3隐藏
+        <br>
+        1 使用 transition元素把需要被动画控制的元素包裹起来
+        <br>
+        2 自定义两种样式，来控制transition内部的元素实现动画
+        <h2>默认</h2>
+        <div>
+            <input type="button" value="toggle" @click="flag=!flag">
+            <transition>
+                <h3 v-if="flag">这里的是默认样式</h3>
+            </transition>
+        </div>
+        <h2>自定义样式</h2>
+        <div>
+            <input type="button" value="toggle2" @click="flag2=!flag2">
+            <transition name="my">
+                <h3 v-if="flag2">这里用了自定义样式</h3>
+            </transition>
+        </div>
+        
+        <div>
+            <button @click="show = !show">
+                Toggle render
+            </button>
+            <transition name="slide-fade">
+                <p v-if="show">hello</p>
+            </transition>
+            <br>
+            <button @click="show2 = !show2">Toggle show</button>
+            <transition name="bounce">
+                <p v-if="show2">啊啊啊~震撼吧！</p>
+            </transition>
+        </div>
+        <h2>第三方库&优先类</h2>
+        <a href="https://cn.vuejs.org/v2/guide/transitions.html#CSS-%E8%BF%87%E6%B8%A1">学习链接</a>
+        <!-- enter-active-class&leave-active-class -->
+        <div style="margin:0 auto;width: 80%">
+            <button @click="show3 = !show3">
+                Toggle render
+            </button>
+            <transition
+                name="custom-classes-transition"
+                enter-active-class="animated tada"
+                leave-active-class="animated bounceOutRight"
+            >
+            <p v-if="show3">第三方库</p>
+            </transition>
+        </div>
+        
+    </div>
+
+    <script>
+        var vm = new Vue(
+            {
+                el: '#app',
+                data: {
+                    flag: true,
+                    flag2: true,
+                    show: true,
+                    show2: true,
+                    show3: true,
+                },
+                methods: {
+                    toggle() {
+                        this.flag = !this.flag
+                    }
+                },
+            }
+        )
+    </script>
+</body>
+
+</html>

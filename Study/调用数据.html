@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="./lib/vue-resource-1.3.4.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>调用数据</title>
+</head>
+<body>
+    <div id="app">
+        <h1 style="color: brown;text-align: center">梧飞男团成员列表</h1>
+        <div>
+            <label>成员编号:
+            <input type="text" v-model="id">
+            </label><br>
+            <label>成员姓名:
+            <input type="text" v-model="name">
+            </label>
+            <input type="button" value="添加新成员" @click="add">
+            <label>
+                搜索成员：
+                <input type="text" v-model="keyword">
+            </label>
+        </div>
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <th>index</th>
+                    <th>id</th>
+                    <th>name</th>
+                </tr>
+                <tr v-for="(item,i) in list" :key="item.id">
+                    <td><input type="checkbox">{{i}}</td>
+                    <td>{{item.id}}</td>
+                    <td>{{item.url}}</td>
+                    <td>{{item.img}}</td>
+                    <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <th>index</th>
+                    <th>id</th>
+                    <th>name</th>
+                </tr>
+                <tr v-for="(item,i) in list2" :key="item.id">
+                    <td><input type="checkbox">{{i}}</td>
+                    <td>{{item.id}}</td>
+                    <td>{{item.url}}</td>
+                    <td>{{item.img}}</td>
+                    <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <th>index</th>
+                    <th>id</th>
+                    <th>location</th>
+                </tr>
+                <tr v-for="(item,i) in list3" :key="item.location_id">
+                    <td><input type="checkbox">{{i}}</td>
+                    <td>{{item.location_id}}</td>
+                    <td>{{item.location}}</td>
+                    <td><a href="#" @click.prevent="del(item.location_id)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                id:'',
+                name:'',
+                list:[],
+                list2:[],
+                list3:[],
+                keyword:''//搜索的关键字
+            },
+            //生命周期函数
+            created(){
+                this.getdataList()
+            },
+            mounted(){
+                this.getdataList2()
+                axios
+                    .get('http://www.liulongbin.top:3005/api/getlunbo')
+                        .then(response => {
+                            this.list2 = response.data.message
+                            // console.log(response.data.message)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        });
+            },
+            methods:{
+                add(){
+                    this.list.push({id:this.id,name:this.name,ctime:new Date()})
+                    this.id = this.name = ''
+                },
+                del(id){
+                    //根据id找到这一项的索引，然后调用splice方法
+                    this.list.some((item,i)=>{
+                        if(item.id==id){
+                            this.list.splice(i,1)
+                            //在数组的some方法中，如果return true，就会立即终止这个数组的后续循环
+                            return true
+                        }
+                    })
+                },
+                search(keyword){
+                    var newList = []
+                    this.list.forEach(item => {
+                        if(item.name.indexOf(keyword)!=-1){
+                            newList.push(item)
+                        }
+                    });
+                    return newList;
+                },
+                //vue-resource调数据
+                getdataList(){
+                    this.$http.get('http://www.liulongbin.top:3005/api/getlunbo').then(result=>{
+                        // $http返回的数据在result.body中
+                        var result = result.body
+                        // console.log(result)
+                        if(result.status ===0){
+                            //表示成功
+                            // console.log("请求成功")
+                            this.list = result.message
+                        }else{
+                            //失败
+                            alert("数据请求失败！")
+                        }
+                    })
+                },
+                // axios调用数据
+                getdataList2(){
+                    // 发起一个POST请求
+                    axios.post('http://192.168.242.104:3000/risk2/get_rsk_location?user=chaiguangfei&location=2223', {
+                        id: 'location_id',
+                        location: 'location'
+                    })
+                    .then(function (response) {
+                        this.list3 = response.data.device;
+                        // console.log(response.data.device);
+                        console.log(this.list3[0].location_id)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                    // axios({
+                    //     method: 'post',
+                    //     url: 'http://192.168.242.104:3000/risk2/get_rsk_location?user=chaiguangfei&location=2223',
+                    //     data: {
+                    //         id: 'id',
+                    //         risk_classify_name: 'risk_classify_name'
+                    //     }
+                    // });
+                     
+                }
+            }
+        })
+    </script>
+    <style>
+        table{
+            margin-top: 10px;
+            padding:10px;
+            border:1px solid brown;
+        }
+    </style>
+</body>
+</html>

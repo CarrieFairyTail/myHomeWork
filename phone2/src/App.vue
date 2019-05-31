@@ -10,6 +10,12 @@
     <div>
       <cube-select v-model="dataCenter" :options="datacenterOptions"/>
       <cube-scroll-nav-bar :current="current" :labels="labels" @change="changeHandler" />
+      <!-- unicode -->
+      <span class="iconfont iconBirthday-Cake"></span>
+      <!-- sy -->
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#iconDonute"></use>
+      </svg>
     </div>
     <!-- <cube-button @click="showDialog">点击</cube-button> -->
   </div>
@@ -80,5 +86,12 @@ export default {
 }
 .cube-input-field {
   /* border-radius: 60rem */
+}
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 </style>

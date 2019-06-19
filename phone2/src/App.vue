@@ -17,7 +17,9 @@
         <use xlink:href="#iconDonute"></use>
       </svg>
     </div>
-    <!-- <cube-button @click="showDialog">点击</cube-button> -->
+    <cube-button @click="showDialog">点击</cube-button>
+    <div id="myChart" style="width:300px;height:300px"></div>
+    <div id="chart1" style="width:300px;height:300px"></div>
   </div>
 </template>
 
@@ -49,6 +51,10 @@ export default {
       datacenterOptions: []
     }
   },
+  mounted(){
+    this.drawLine();
+    this.$chart.line1('chart1');
+  },
   methods: {
     showDialog() {
       this.$createDialog({
@@ -59,6 +65,25 @@ export default {
     },
     changeHandler(cur) {
       this.current = cur
+    },
+    // 绘制图表
+    drawLine() {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(document.getElementById('myChart'))
+      // 绘制图表
+      myChart.setOption({
+          title: { text: '在Vue中使用echarts' },
+          tooltip: {},
+          xAxis: {
+              data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+          },
+          yAxis: {},
+          series: [{
+              name: '销量',
+              type: 'bar',
+              data: [5, 20, 36, 10, 10, 20]
+          }]
+      });
     }
   }
 }

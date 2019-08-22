@@ -15,6 +15,9 @@ Vue.prototype.$echarts = echarts
 // By default we import all the components.
 // Only reserve the components on demand and remove the rest.
 // Style is always required.
+
+import router from './router/router'
+
 import {
   Style,
   // basic
@@ -105,7 +108,6 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  template: '<App/>',
-  components: { App }
-})
+  router,
+  render: h => h(App)
+}).$mount('#app')
